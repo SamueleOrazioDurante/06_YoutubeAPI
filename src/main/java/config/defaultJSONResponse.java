@@ -1,3 +1,5 @@
+package config;
+
 public class defaultJSONResponse{
 	
 	static private String jsonSearch = "{\r\n"

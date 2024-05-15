@@ -20,6 +20,7 @@ import config.defaultJSONResponse;
 public class YT_API extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Authenticator auth;
+	private DefaultConnector connector;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -35,6 +36,7 @@ public class YT_API extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		// TODO Auto-generated method stub
 		auth = new Authenticator();
+		connector = new DefaultConnector();
 	}
 
 	/**
@@ -53,19 +55,29 @@ public class YT_API extends HttpServlet {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			
-			switch (action) {
-			case "/search":
-				out.print(search(request, response));
-				break;
-			case "/download/MP3":
-				out.print(download(request, response, "mp3"));
-				break;
-			case "/download/MP4":
-				out.print(download(request, response, "mp4"));
-				break;
-			default:
-				out.print(error("NoMethod"));
-				break;
+			try {
+				switch (action) {
+				case "/search":
+					out.print(search(request, response));
+					break;
+				case "/download/MP3":
+					out.print(download(request, response, "mp3"));
+					break;
+				case "/download/MP4":
+					
+						out.print(download(request, response, "mp4"));
+					
+					break;
+				default:
+					out.print(error("NoMethod"));
+					break;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
 			
@@ -76,9 +88,10 @@ public class YT_API extends HttpServlet {
 		out.flush();
 	}
 	
-	private String search(HttpServletRequest request, HttpServletResponse response) {
+	private String search(HttpServletRequest request, HttpServletResponse response) throws IOException, InterruptedException {
 		
 		String query = request.getParameter("query");
+		String json = "";
 		
 		if(query == null) {
 			return error("NoQuery");
@@ -90,13 +103,15 @@ public class YT_API extends HttpServlet {
 		String json = defaultJSONResponse.getJsonSearch();
 		
 		*/
-		String json = defaultJSONResponse.getJsonSearch();
+		
+		json = connector.search(query);
+		
 		System.out.println("Richiesta di ricerca con query: "+query);
 		
 		return json;
 	}
 	
-	private String download(HttpServletRequest request, HttpServletResponse response, String format) {
+	private String download(HttpServletRequest request, HttpServletResponse response, String format) throws IOException, InterruptedException {
 		
 		String id = request.getParameter("id");
 		String json = "";
@@ -111,12 +126,15 @@ public class YT_API extends HttpServlet {
 			json = defaultJSONResponse.getJsonMP3();
 		}
 		*/
+		
+		
 		if(format.equals("mp4")) {
-			json = defaultJSONResponse.getJsonMP4();
+			json = connector.downloadMP4(id);
 			}	
 		if(format.equals("mp3")) {
-			json = defaultJSONResponse.getJsonMP3();
+			json = connector.downloadMP3(id);
 		}
+		
 		System.out.println("Richiesta di download con formato: "+format);
 		
 		return json;
