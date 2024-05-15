@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import utilities.*;
-import config.defaultJSONResponse;
 
 /**
  * Servlet implementation class YT_API
@@ -64,9 +63,7 @@ public class YT_API extends HttpServlet {
 					out.print(download(request, response, "mp3"));
 					break;
 				case "/download/MP4":
-					
-						out.print(download(request, response, "mp4"));
-					
+					out.print(download(request, response, "mp4"));
 					break;
 				default:
 					out.print(error("NoMethod"));

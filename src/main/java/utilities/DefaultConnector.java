@@ -19,6 +19,8 @@ public class DefaultConnector{
 		//add id parameter
 		url += "?id="+id;
 		
+		System.out.println("Sent downloadMP3 request to API with URL: "+url);
+		
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(url))
 				.header("X-RapidAPI-Key", APIConfig.getRapidAPI_key())
@@ -38,6 +40,8 @@ public class DefaultConnector{
 		
 		//add id parameter
 		url += "?id="+id;
+		
+		System.out.println("Sent downloadMP4 request to API with URL: "+url);
 		
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(url))
@@ -63,6 +67,8 @@ public class DefaultConnector{
 		
 		//add other optional parameter from APIConfig
 		url += "&lang="+APIConfig.getLang()+"&order_by="+APIConfig.getOrder_by()+"&country="+APIConfig.getCountry()+"";
+		
+		System.out.println("Sent search request to API with URL: "+url);
 		
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(url))
